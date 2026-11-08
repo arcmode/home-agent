@@ -1,0 +1,6 @@
+[[tool]]
+name = "sauna"
+repo = "/home/david/code/solara"
+skill = "skills/sauna"
+command = "/home/david/code/solara/.venv/bin/python"
+args = ["/home/david/code/solara/src/sauna_mcp.py"]
