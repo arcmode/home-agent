@@ -1,4 +1,9 @@
 [[tool]]
+name = "audio"
+repo = "/home/david/code/home-agent"
+skill = "skills/audio"
+
+[[tool]]
 name = "sauna"
 repo = "/home/david/code/solara"
 skill = "skills/sauna"

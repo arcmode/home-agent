@@ -11,7 +11,10 @@ Ollama and ZeroClaw run as user services. The live config is `~/.zeroclaw/config
 | This repo | Bot identity, rules, and tool catalog | `~/code/home-agent` |
 | Sauna tools | Heater commands | `~/code/solara/src/sauna_mcp.py` |
 | Sauna skill | Heater rules for the model | `~/code/solara/skills/sauna` |
-| Skill link | The path ZeroClaw loads | `~/.zeroclaw/shared/skills/sauna` |
+| Skill link | The path ZeroClaw loads | `~/.zeroclaw/shared/skills` |
+| Speech replies | Voice notes for Telegram | `speak/server.py` |
+| Voice-reply tool | On and off setting | `audio/mcp.py` |
+| Voice-reply skill | Rules for that tool | `skills/audio` |
 | Ollama | Local model server | `127.0.0.1:11434` |
 | ZeroClaw | Agent and Telegram channel | `127.0.0.1:42617` |
 
@@ -59,6 +62,21 @@ systemctl --user status transcribe.service
 ```
 
 A voice message longer than 120 seconds is skipped. Send a new voice message after you enable the service. ZeroClaw does not retry a voice message it already skipped.
+
+## Audio replies
+
+The speech reply service builds WAV audio on this computer. It listens on `127.0.0.1:8179`. The laptop speakers stay quiet. ZeroClaw converts the WAV to Opus with `ffmpeg` and uploads a voice note to the same chat. The service uses `SPEAK_VOICE` from `deploy/speak.service`. Change that line, then run `systemctl --user daemon-reload` and restart `speak.service`.
+
+Voice replies start off. Say or type `turn voice replies on` or `turn voice replies off`. The speech service stores that setting. Later answers do not repeat it.
+
+A typed message gets text. A typed message that says `answer via voice` gets a voice note. A voice message gets text while voice replies are off. The service refuses the voice note. A voice message gets text and a voice note while voice replies are on. The voice note follows the text by about 10 seconds. A reply of 40 characters or fewer stays text, so a voice answer uses two sentences.
+
+The service file is `deploy/speak.service`. The program is `speak/server.py`. The voice is `en_US-libritts-high`. The first start downloads the voice into `~/.cache/home-agent/piper`.
+
+```bash
+systemctl --user enable --now speak.service
+systemctl --user status speak.service
+```
 
 ## Service
 

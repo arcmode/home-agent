@@ -8,7 +8,7 @@ host = "127.0.0.1"
 allow_public_bind = false
 
 [tools]
-optional = []
+optional = ["send_via"]
 
 [memory]
 backend = "none"
@@ -23,7 +23,7 @@ context_window = 8192
 num_predict = 768
 temperature = 0.1
 temperature_override = 0.1
-think = false
+think = true
 native_tools = true
 timeout_secs = 300
 
@@ -31,10 +31,11 @@ timeout_secs = 300
 enabled = true
 model_provider = "ollama.local"
 transcription_provider = "local_whisper.home"
+tts_provider = "piper.home"
 risk_profile = "home"
 runtime_profile = "home"
-mcp_bundles = ["sauna"]
-skill_bundles = ["sauna"]
+mcp_bundles = ["sauna", "audio"]
+skill_bundles = ["sauna", "audio"]
 channels = ["telegram.home"]
 
 [agents.home.identity]
@@ -61,6 +62,8 @@ auto_approve = [
     "solara__sauna_off",
     "solara__sauna_set_temperature",
     "solara__sauna_set_timer",
+    "send_via",
+    "audio__audio_replies",
 ]
 allowed_tools = [
     "solara__sauna_status",
@@ -69,6 +72,8 @@ allowed_tools = [
     "solara__sauna_set_temperature",
     "solara__sauna_set_timer",
     "shell",
+    "send_via",
+    "audio__audio_replies",
 ]
 excluded_tools = [
     "file_read",
@@ -114,8 +119,22 @@ command = "/home/david/code/solara/.venv/bin/python"
 args = ["/home/david/code/solara/src/sauna_mcp.py"]
 tool_timeout_secs = 900
 
+[[mcp.servers]]
+name = "audio"
+transport = "stdio"
+command = "/usr/bin/python3"
+args = ["/home/david/code/home-agent/audio/mcp.py"]
+tool_timeout_secs = 30
+
 [mcp_bundles.sauna]
 servers = ["solara"]
+
+[mcp_bundles.audio]
+servers = ["audio"]
+
+[skill_bundles.audio]
+directory = "shared/skills"
+include = ["audio"]
 
 [skill_bundles.sauna]
 directory = "shared/skills"
@@ -137,3 +156,10 @@ max_duration_secs = 120
 
 [providers.transcription.local_whisper.home]
 uri = "http://127.0.0.1:8178/v1/transcribe"
+
+[tts]
+enabled = true
+
+[providers.tts.piper.home]
+uri = "http://127.0.0.1:8179/v1/audio/speech"
+voice = "en_US-libritts-high"

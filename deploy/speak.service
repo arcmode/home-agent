@@ -1,0 +1,16 @@
+[Unit]
+Description=Home agent speech replies
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/code/home-agent/speak/.venv/bin/python %h/code/home-agent/speak/server.py
+Environment=HOME=%h
+Environment=SPEAK_HOST=127.0.0.1
+Environment=SPEAK_PORT=8179
+Environment=SPEAK_VOICE=en_US-libritts-high
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target
