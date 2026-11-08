@@ -39,7 +39,7 @@ A skill file tells the model when to use a tool. The risk profile grants the too
 
 The shell can run `ls` and `cat`. The autonomy level is `supervised`, so the workspace boundary stays on. The five sauna tools are in `auto_approve`, so a heater command does not wait for a second approval. Every shell command asks for approval in the Telegram chat, because `shell` is in `always_ask`. A missing answer denies the command after 120 seconds.
 
-The profile requests Landlock. This release binary does not include Landlock, and Firejail is not installed, so that request falls back to the command list and the workspace boundary. Install Firejail with `sudo apt install firejail`, then set `sandbox_backend` to `firejail`, to add the OS wrapper this build can run.
+The example config requests Landlock. `deploy/zeroclaw.config.example.toml` sets `sandbox_backend` to `landlock`.
 
 Sauna commands do not use that approval. The sauna program checks the heater limits.
 

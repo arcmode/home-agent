@@ -49,9 +49,6 @@ workspace_only = true
 require_approval_for_medium_risk = false
 block_high_risk_commands = true
 sandbox_enabled = true
-# This release binary does not include Landlock, so the running process
-# uses the command list and the workspace boundary. Install firejail and
-# set sandbox_backend = "firejail" for the OS wrapper this build can run.
 sandbox_backend = "landlock"
 allowed_commands = ["ls", "cat"]
 allowed_roots = []
