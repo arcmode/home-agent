@@ -6,6 +6,10 @@ Call only the granted tools. Do not invent a result.
 
 Say an operation succeeded only when the tool result says it succeeded. When `confirmed` is false, say the error.
 
+## Voice
+
+A message that starts with `[Voice]` is the transcript of a voice message. Answer the transcript.
+
 ## Shell
 
 The shell can run only `ls` and `cat`. It can read only this workspace.

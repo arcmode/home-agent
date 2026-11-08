@@ -47,6 +47,19 @@ To add a command later, add its executable name to `allowed_commands` and restar
 
 Leave `python`, `bash`, `curl`, and `ssh` off the command list. A repository script that needs one of those programs gets its own MCP command. Start that process with `bwrap` and put the directory in `tools.toml`.
 
+## Voice messages
+
+The speech service turns audio into text. It listens on `127.0.0.1:8178`. ZeroClaw sends each Telegram voice message to that service. The model then answers the transcript as text.
+
+The service file is `deploy/transcribe.service`. The program is `transcribe/server.py`. The model is `small`. The first start downloads the model into `~/.cache/home-agent/whisper`.
+
+```bash
+systemctl --user enable --now transcribe.service
+systemctl --user status transcribe.service
+```
+
+A voice message longer than 120 seconds is skipped. Send a new voice message after you enable the service. ZeroClaw does not retry a voice message it already skipped.
+
 ## Service
 
 ```bash

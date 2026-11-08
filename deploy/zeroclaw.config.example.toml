@@ -30,6 +30,7 @@ timeout_secs = 300
 [agents.home]
 enabled = true
 model_provider = "ollama.local"
+transcription_provider = "local_whisper.home"
 risk_profile = "home"
 runtime_profile = "home"
 mcp_bundles = ["sauna"]
@@ -129,3 +130,10 @@ approval_timeout_secs = 120
 [skills]
 allow_scripts = false
 open_skills_enabled = false
+
+[transcription]
+enabled = true
+max_duration_secs = 120
+
+[providers.transcription.local_whisper.home]
+uri = "http://127.0.0.1:8178/v1/transcribe"
