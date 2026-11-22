@@ -10,10 +10,15 @@ allow_public_bind = false
 [tools]
 optional = ["send_via"]
 
+# SQLite memory collects what the user says, for the retrieval benchmark of
+# wavelet-db. The database is ~/.zeroclaw/data/memory/brain.db. The agent does
+# not recall memories (memory_recall_limit = 0, and the memory tools are
+# excluded), so the prompts do not change.
 [memory]
-backend = "none"
+backend = "sqlite"
 embedding_provider = "none"
-auto_save = false
+auto_save = true
+conversation_retention_days = 0
 
 [providers.models.ollama.local]
 model = "qwen3.5:4b"
@@ -34,8 +39,8 @@ transcription_provider = "local_whisper.home"
 tts_provider = "piper.home"
 risk_profile = "home"
 runtime_profile = "home"
-mcp_bundles = ["sauna", "audio"]
-skill_bundles = ["sauna", "audio"]
+mcp_bundles = ["sauna", "audio", "router"]
+skill_bundles = ["sauna", "audio", "router"]
 channels = ["telegram.home"]
 
 [agents.home.identity]
@@ -64,6 +69,8 @@ auto_approve = [
     "solara__sauna_set_timer",
     "send_via",
     "audio__audio_replies",
+    "router__wifi_status",
+    "router__wifi_set",
 ]
 allowed_tools = [
     "solara__sauna_status",
@@ -74,6 +81,8 @@ allowed_tools = [
     "shell",
     "send_via",
     "audio__audio_replies",
+    "router__wifi_status",
+    "router__wifi_set",
 ]
 excluded_tools = [
     "file_read",
@@ -126,15 +135,35 @@ command = "/usr/bin/python3"
 args = ["/home/david/code/home-agent/audio/mcp.py"]
 tool_timeout_secs = 30
 
+# Set the password with: zeroclaw config set mcp.servers.router.env.ROUTER_PASSWORD
+# ZeroClaw stores it encrypted. Do not write it in this file.
+[[mcp.servers]]
+name = "router"
+transport = "stdio"
+command = "/usr/bin/python3"
+args = ["/home/david/code/home-agent/router/mcp.py"]
+tool_timeout_secs = 180
+
+[mcp.servers.env]
+ROUTER_URL = "http://10.0.0.1"
+ROUTER_USER = "admin"
+
 [mcp_bundles.sauna]
 servers = ["solara"]
 
 [mcp_bundles.audio]
 servers = ["audio"]
 
+[mcp_bundles.router]
+servers = ["router"]
+
 [skill_bundles.audio]
 directory = "shared/skills"
 include = ["audio"]
+
+[skill_bundles.router]
+directory = "shared/skills"
+include = ["router"]
 
 [skill_bundles.sauna]
 directory = "shared/skills"

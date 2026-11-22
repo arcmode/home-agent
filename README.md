@@ -15,6 +15,8 @@ Ollama and ZeroClaw run as user services. The live config is `~/.zeroclaw/config
 | Speech replies | Voice notes for Telegram | `speak/server.py` |
 | Voice-reply tool | On and off setting | `audio/mcp.py` |
 | Voice-reply skill | Rules for that tool | `skills/audio` |
+| Wi-Fi tools | Router radio on and off | `router/mcp.py` |
+| Wi-Fi skill | Rules for those tools | `skills/router` |
 | Ollama | Local model server | `127.0.0.1:11434` |
 | ZeroClaw | Agent and Telegram channel | `127.0.0.1:42617` |
 
@@ -76,6 +78,21 @@ The service file is `deploy/speak.service`. The program is `speak/server.py`. Th
 ```bash
 systemctl --user enable --now speak.service
 systemctl --user status speak.service
+```
+
+## Wi-Fi
+
+The Wi-Fi tools talk to the Xfinity gateway at `10.0.0.1` over HTTP. No browser runs. Each call logs in, reads the current settings from the wireless edit page, and posts them back with only `radio_enable` changed. The network name, password, and channel stay the same.
+
+Say or type `is the wifi on`, `turn off the 5GHz wifi`, or `turn the wifi on`. A request with no band uses both bands.
+
+This computer reaches the internet over Wi-Fi. The tool refuses to turn off every band while that is true, because the bot could not turn the Wi-Fi back on. With an Ethernet cable plugged in, the tool allows it.
+
+The router password lives in the ZeroClaw config, encrypted. It is not in this repo.
+
+```bash
+zeroclaw config set mcp.servers.router.env.ROUTER_PASSWORD
+cd ~/code/home-agent/router && python3 -m unittest test_client
 ```
 
 ## Service

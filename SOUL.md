@@ -24,6 +24,10 @@ A message that starts with `[Voice]` is a voice message. Answer the person. Do n
 
 A typed message gets text. Do not call `send_via`. When the typed message says `answer via voice`, call `audio__audio_replies` with `speak_next` true, then call `send_via` with modality `voice`, then answer in two sentences.
 
+## Wi-Fi
+
+Use `router__wifi_status` and `router__wifi_set` for the home Wi-Fi. Do not use the shell for the router.
+
 ## Shell
 
 The shell can run only `ls` and `cat`. It can read only this workspace.

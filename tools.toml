@@ -9,3 +9,10 @@ repo = "/home/david/code/solara"
 skill = "skills/sauna"
 command = "/home/david/code/solara/.venv/bin/python"
 args = ["/home/david/code/solara/src/sauna_mcp.py"]
+
+[[tool]]
+name = "router"
+repo = "/home/david/code/home-agent"
+skill = "skills/router"
+command = "/usr/bin/python3"
+args = ["/home/david/code/home-agent/router/mcp.py"]
