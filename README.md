@@ -2,7 +2,7 @@
 
 This repository is the workspace for the local Telegram bot. ZeroClaw reads `IDENTITY.md` and `SOUL.md` from this directory. The sauna tools and the sauna skill stay in `~/code/solara`.
 
-Ollama and ZeroClaw run as user services. The live config is `~/.zeroclaw/config.toml`. An example with no secrets is in `deploy/zeroclaw.config.example.toml`.
+ZeroClaw runs as a user service. The agent uses Claude Haiku 5.5 over the Anthropic API. Ollama is installed, but no agent uses it. The live config is `~/.zeroclaw/config.toml`. An example with no secrets is in `deploy/zeroclaw.config.example.toml`.
 
 ## Layout
 
@@ -17,7 +17,8 @@ Ollama and ZeroClaw run as user services. The live config is `~/.zeroclaw/config
 | Voice-reply skill | Rules for that tool | `skills/audio` |
 | Wi-Fi tools | Router radio on and off | `router/mcp.py` |
 | Wi-Fi skill | Rules for those tools | `skills/router` |
-| Ollama | Local model server | `127.0.0.1:11434` |
+| Claude Haiku 5.5 | Agent model (Anthropic API) | `providers.models.anthropic.home` |
+| Ollama | Local model server, not used | `127.0.0.1:11434` |
 | ZeroClaw | Agent and Telegram channel | `127.0.0.1:42617` |
 
 The skill link points at the solara skill directory. This repo does not keep a second copy.

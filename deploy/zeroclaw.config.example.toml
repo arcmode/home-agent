@@ -20,6 +20,16 @@ embedding_provider = "none"
 auto_save = true
 conversation_retention_days = 0
 
+# The agent uses Claude Haiku over the Anthropic API, so it does not use the GPU.
+# Set the key with: zeroclaw config set providers.models.anthropic.home.api_key
+# Do not write the key in this file.
+[providers.models.anthropic.home]
+model = "claude-haiku-5-5"
+context_window = 1000000
+max_tokens = 4096
+timeout_secs = 120
+
+# Local model. No agent uses it now.
 [providers.models.ollama.local]
 model = "qwen3.5:4b"
 uri = "http://127.0.0.1:11434"
@@ -34,7 +44,7 @@ timeout_secs = 300
 
 [agents.home]
 enabled = true
-model_provider = "ollama.local"
+model_provider = "anthropic.home"
 transcription_provider = "local_whisper.home"
 tts_provider = "piper.home"
 risk_profile = "home"
@@ -103,15 +113,15 @@ excluded_tools = [
 [runtime_profiles.home]
 agentic = true
 strict_tool_parsing = true
-max_tool_iterations = 3
-max_history_messages = 8
-max_context_tokens = 7000
-max_system_prompt_chars = 8000
-max_tool_result_chars = 2000
+max_tool_iterations = 8
+max_history_messages = 40
+max_context_tokens = 64000
+max_system_prompt_chars = 32000
+max_tool_result_chars = 16000
 parallel_tools = false
 agentic_timeout_secs = 900
 delegation_timeout_secs = 30
-keep_tool_context_turns = 1
+keep_tool_context_turns = 4
 memory_recall_limit = 0
 
 [runtime_profiles.home.thinking]
