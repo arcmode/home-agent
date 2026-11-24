@@ -17,6 +17,8 @@ optional = ["send_via"]
 [memory]
 backend = "sqlite"
 embedding_provider = "none"
+# With no embedding provider, only keyword search runs.
+search_mode = "bm25"
 auto_save = true
 conversation_retention_days = 0
 
